@@ -1,0 +1,9 @@
+[nagios:children]
+tag_Name_Nagios
+
+[servers:children]
+tag_os_centos
+
+[multi:children]
+nagios
+servers

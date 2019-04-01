@@ -1,0 +1,69 @@
+# generic Linux servers
+define hostgroup {
+	hostgroup_name servers
+        alias Linux Servers
+}
+
+{% for host in groups['servers'] %}
+define host {
+	use                     linux-server
+	host_name               {{ hostvars[host].ansible_nodename }}
+	alias                   {{ hostvars[host].ansible_hostname }}
+	address                 {{ hostvars[host].ansible_default_ipv4.address }}
+	hostgroups 		        servers
+}
+{% endfor %}
+
+#define service{
+#    use                     generic-service
+#    hostgroup_name               servers
+#    service_description     PING
+#    check_command           check_ping!100.0,20%!500.0,60%
+#}
+
+# for free disk
+define service{
+    use                    generic-service
+    hostgroup_name              servers
+    service_description    Root Partition
+    check_command          check_nrpe!check_hda1\!20%\!10%\!/
+    }
+# for current users
+define service{
+    use                    generic-service
+    hostgroup_name              servers
+    service_description    Current Users
+    check_command          check_nrpe!check_users\!20\!50
+    }
+# for total processes
+define service{
+    use                    generic-service
+    hostgroup_name              servers
+    service_description    Total Processes
+    check_command          check_nrpe!check_total_procs\!250\!400\!RSZDT
+    }
+# for current load
+define service{
+    use                    generic-service
+    hostgroup_name              servers
+    service_description    Current Load
+    check_command          check_nrpe!check_load\!5.0,4.0,3.0\!10.0,6.0,4.0
+    }
+
+# for total processes
+define service{
+    use                    generic-service
+    hostgroup_name              servers
+    service_description    Available Memory 
+    check_command          check_nrpe!check_avail_memory
+    }
+
+
+
+define service{
+    use                    generic-service
+    hostgroup_name              servers
+    service_description    CPU
+    check_command          check_nrpe!check_cpu
+    }
+

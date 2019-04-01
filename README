@@ -1,0 +1,15 @@
+written for centos 7.4
+
+ip addresses use the internal ip to connect to nagios
+
+dynamic directory enabled !!! 
+don't run the playbook if you don't know what you are doing, 
+it will deploy it to the aws cloud if your computer is setup correctly
+
+
+to run the playbook type
+# ansible-playbook nagios.yml --ask-vault-pass 
+
+the ec2 instances should be tagged with tag_monitor_nagios and tag_Name_Nagios
+tag_monitor_nagios: all servers
+tag_Name_Nagios: nagios server
